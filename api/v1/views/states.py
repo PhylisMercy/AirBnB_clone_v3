@@ -17,7 +17,8 @@ def states():
     RestFul API actions.
     """
     if request.method == 'GET':
-        return jsonify([val.to_dict() for val in storage.all('State').values()])
+        return jsonify([val.to_dict() for val in storage.all('State')
+                        .values()])
     elif request.method == 'POST':
         post = request.get_json()
         if post is None or type(post) != dict:
@@ -30,7 +31,7 @@ def states():
 
 
 @app_views.route('/states/<string:state_id>',
-                  methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
+                 methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
 def get_state_id(state_id):
     """Retrieves a state object with a specific id"""
     state = storage.get('State', state_id)
