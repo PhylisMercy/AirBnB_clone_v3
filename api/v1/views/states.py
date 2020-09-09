@@ -10,11 +10,8 @@ from api.v1.views import app_views
 from models import storage
 from models.state import State
 
-state_view = Blueprint('state_view', __name__,
-                       template_folder='views', url_prefix='/api/v1/')
 
-
-@state_view.route('/states', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/states', methods=['GET', 'POST'], strict_slashes=False)
 def states():
     """Create a new view for State objects that handles all default
     RestFul API actions.
@@ -32,7 +29,7 @@ def states():
         return jsonify(new_state.to_dict()), 201
 
 
-@state_view.route('/states/<string:state_id>',
+@app_views.route('/states/<string:state_id>',
                   methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
 def get_state_id(state_id):
     """Retrieves a state object with a specific id"""
@@ -42,6 +39,7 @@ def get_state_id(state_id):
     elif request.method == 'GET':
         return jsonify(state.to_dict())
     elif request.method == 'DELETE':
+        state = storage.get('State', state_id)
         storage.delete(state)
         storage.save()
         return jsonify({}), 200
@@ -52,4 +50,5 @@ def get_state_id(state_id):
         for key, value in put.items():
             if key not in ['id', 'created_at', 'updated_at']:
                 setattr(state, key, value)
+                storage.save()
         return jsonify(state.to_dict()), 200
