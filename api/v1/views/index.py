@@ -6,11 +6,10 @@ Created on Tue Sep  1 14:42:23 2020
           Mauricio Olarte
 """
 from flask import jsonify, Blueprint
-from . import app_views
 from models import storage
+from api.v1.views import app_views
+from models.state import State
 
-index_view = Blueprint('index_view', __name__,
-                       template_folder='views', url_prefix='/api/v1/')
 
 @app_views.route('/status', methods=['GET'], strict_slashes=False)
 def get_status():
@@ -18,7 +17,7 @@ def get_status():
     return jsonify({'status': 'OK'})
 
 
-@index_view.route('/stats', methods=['GET'], strict_slashes=False)
+@app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def object_status():
     """Create an endpoint that retrieves the number of each objects by type
     """
