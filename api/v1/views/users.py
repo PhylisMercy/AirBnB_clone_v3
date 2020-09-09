@@ -23,8 +23,10 @@ def users():
         post = request.get_json()
         if post is None or type(post) != dict:
             return jsonify({'error': 'Not a JSON'}), 400
-        elif post.get('name') is None:
-            return jsonify({'error': 'Missing name'}), 400
+        elif post.get('email') is None:
+            return jsonify({'error': 'Missing email'}), 400
+        elif post.get('password') is None:
+            return jsonify({'error': 'Missing password'}), 400
         new_user = User(**post)
         new_user.save()
         return jsonify(new_user.to_dict()), 201
