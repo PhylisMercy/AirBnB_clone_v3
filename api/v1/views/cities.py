@@ -14,12 +14,12 @@ from models.city import City
 
 @app_views.route('/states/<string:state_id>/cities', methods=['GET', 'POST'],
                  strict_slashes=False)
-def cities():
+def cities(state_id):
     """Create a new view for City objects that handles all default
     RestFul API actions.
     """
     state = storage.get('State', state_id)
-    if my_state is None:
+    if state is None:
         abort(404)
     if request.method == 'GET':
         return jsonify([val.to_dict() for val in state.cities])
@@ -29,7 +29,7 @@ def cities():
             return jsonify({'error': 'Not a JSON'}), 400
         elif post.get('name') is None:
             return jsonify({'error': 'Missing name'}), 400
-        new_stte = City(state_id=state_id, **post)
+        new_state = City(state_id=state_id, **post)
         new_state.save()
         return jsonify(new_state.to_dict()), 201
 
@@ -44,7 +44,7 @@ def get_city_id(city_id):
     elif request.method == 'GET':
         return jsonify(city.to_dict())
     elif request.method == 'DELETE':
-        city = storage.get('City', state_id)
+        city = storage.get('City', city_id)
         storage.delete(city)
         storage.save()
         return jsonify({}), 200
