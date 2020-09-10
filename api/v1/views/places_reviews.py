@@ -12,7 +12,7 @@ from models.place import Place
 from models.review import Review
 
 
-@app_views.route('/places/<string: place_id>/reviews', methods=['GET', 'POST'],
+@app_views.route('/places/<string:place_id>/reviews', methods=['GET', 'POST'],
                  strict_slashes=False)
 def places_reviews(place_id):
     """Create a new view for City objects that handles all default
